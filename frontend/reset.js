@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         try {
-            const response = await fetch('http://localhost:3000/request-reset', {
+            const response = await fetch('https://swiftedge-trade.onrender.com/request-reset', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

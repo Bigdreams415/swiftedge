@@ -212,7 +212,7 @@ function copyToClipboard(elementId) {
 
 // Redirect to Support Email Function
 function redirectToSupportEmail() {
-  const supportEmail = "support@example.com";
+  const supportEmail = "swiftedgetrade@gmail.com";
   const subject = "Request for Credit/Debit Card Deposit Instructions";
   const body = `Hello,\n\nI would like to deposit funds using my credit or debit card. Please provide me with the necessary instructions to complete the transaction.\n\nThank you!`;
 
@@ -226,7 +226,7 @@ function redirectToSupportEmail() {
 
 // Redirect to Email Support Function this is for the email 
 function redirectToEmailDepositSupport() {
-  const supportEmail = "support@example.com";
+  const supportEmail = "swiftedgetrade@gmail.com";
   const subject = "Request for Deposit Instructions via Email";
   const body = `Hello,\n\nI would like to deposit funds using the 'Deposit through Email' method. Please provide me with the necessary details to complete the transaction.\n\nThank you!`;
 
@@ -240,7 +240,7 @@ function redirectToEmailDepositSupport() {
 
 // Fetch deposit details from the backend when the page loads
 window.addEventListener('DOMContentLoaded', () => {
-  fetch('/api/deposit-details')
+  fetch('https://swiftedge-trade.onrender.com/api/deposit-details')
       .then(response => response.json())
       .then(data => {
           if (data) {
@@ -311,7 +311,7 @@ if (method) {
 async function fetchUserInfo() {
   try {
       // Fetch the user info using the GET route
-      const response = await fetch('https://sterling-edge.onrender.com/user-info', {
+      const response = await fetch('https://swiftedge-trade.onrender.com/user-info', {
           method: 'GET',
           headers: {
               'Authorization': `Bearer ${localStorage.getItem('authToken')}`, // Retrieve the JWT token from local storage (or wherever you store it)
@@ -343,7 +343,7 @@ async function fetchUserInfo() {
 function fetchPortfolioData() {
     console.log('Fetching portfolio data...');
     
-    fetch('https://sterling-edge.onrender.com/portfolio', {
+    fetch('https://swiftedge-trade.onrender.com/portfolio', {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('authToken')}`
