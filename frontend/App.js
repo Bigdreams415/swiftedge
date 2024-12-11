@@ -240,7 +240,7 @@ function redirectToEmailDepositSupport() {
 
 // Fetch deposit details from the backend when the page loads
 window.addEventListener('DOMContentLoaded', () => {
-  fetch('https://swiftedge-trade.onrender.com/api/deposit-details')
+  fetch('http://localhost:3000/api/deposit-details')
       .then(response => response.json())
       .then(data => {
           if (data) {
@@ -311,7 +311,7 @@ if (method) {
 async function fetchUserInfo() {
   try {
       // Fetch the user info using the GET route
-      const response = await fetch('https://swiftedge-trade.onrender.com/user-info', {
+      const response = await fetch('http://localhost:3000/user-info', {
           method: 'GET',
           headers: {
               'Authorization': `Bearer ${localStorage.getItem('authToken')}`, // Retrieve the JWT token from local storage (or wherever you store it)
@@ -343,7 +343,7 @@ async function fetchUserInfo() {
 function fetchPortfolioData() {
     console.log('Fetching portfolio data...');
     
-    fetch('https://swiftedge-trade.onrender.com/portfolio', {
+    fetch('http://localhost:3000/portfolio', {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('authToken')}`

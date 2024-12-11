@@ -7,9 +7,14 @@
   <link rel="stylesheet" href="admin.css">
 </head>
 <body>
+
   <div class="admin-container">
+    <!-- Hamburger Menu for Mobile -->
+    <button class="hamburger-menu" id="hamburger-menu">&#9776;</button>
+  
     <!-- Sidebar -->
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
+      <button class="close-btn" id="close-sidebar">&times;</button>
       <ul>
         <li data-section="bank-transfer" class="active">Bank Transfer</li>
         <li data-section="crypto">Cryptocurrency</li>
@@ -18,7 +23,10 @@
         <li data-section="manage-holdings">Manage Holdings</li>
       </ul>
     </aside>
-
+  
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+  
     <!-- Main Content -->
     <main class="content">
       <!-- Bank Transfer Section -->
@@ -26,24 +34,25 @@
         <h2>Bank Transfer</h2>
         <form>
           <label for="bank-name">Bank Name:</label>
-          <input type="text" id="bank-name" name="bank-name">
-
+          <input type="text" id="bank-name" name="bank-name" />
+  
           <label for="routing-number">Routing Number:</label>
-          <input type="text" id="routing-number" name="routing-number">
-
+          <input type="text" id="routing-number" name="routing-number" />
+  
           <label for="account-number">Account Number:</label>
-          <input type="text" id="account-number" name="account-number">
-
+          <input type="text" id="account-number" name="account-number" />
+  
           <label for="account-name">Account Name:</label>
-          <input type="text" id="account-name" name="account-name">
-
+          <input type="text" id="account-name" name="account-name" />
+  
           <label for="swift-code">SWIFT Code:</label>
-          <input type="text" id="swift-code" name="swift-code">
-
+          <input type="text" id="swift-code" name="swift-code" />
+  
           <button type="button" id="save-bank-transfer">Save</button>
         </form>
       </section>
-
+  
+      <!-- Other Sections -->
       <!-- Cryptocurrency Section -->
       <section id="crypto" class="content-section hidden">
         <h2>Cryptocurrency</h2>
@@ -98,7 +107,6 @@
         <p>No editable fields required. Users will contact support via email for card deposit instructions.</p>
       </section>
 
-      
       <!-- Manage Holdings Section -->
       <div id="manage-holdings" class="content-section hidden">
         <!-- Search User Section -->
@@ -140,13 +148,11 @@
 
         <!-- Feedback Messages -->
         <div id="feedback-msg" class="feedback-msg"></div>
-    </div>
-
-
-
+      </div>
 
     </main>
   </div>
+  
   <script src="admin.js"></script>
 </body>
 </html>

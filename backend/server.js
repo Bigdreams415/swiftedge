@@ -15,12 +15,12 @@ const app = express();
 
 
 // Serve static files from the frontend folder
-// app.use(express.static(path.join(__dirname, '../frontend')));
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Route to serve home.html for the homepage
-// app.get('/', (req, res) => {
-//     res.sendFile(path.join(__dirname, '../frontend/index.html'));
-// });
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/index.html'));
+});
 
 
 // Middleware
@@ -663,6 +663,39 @@ app.post('/reset-password/:token', async (req, res) => {
       res.status(500).json({ message: 'Server error' });
   }
 });
+
+
+// Admin login route
+app.post('/admin/login', async (req, res) => {
+  const { username, password } = req.body;
+
+  console.log("Received admin login request:", req.body);
+
+  try {
+      // Validate credentials against environment variables
+      if (username === process.env.ADMIN_USERNAME && password === process.env.ADMIN_PASSWORD) {
+          
+          // Create JWT token
+          const token = jwt.sign(
+              { username }, // Payload
+              process.env.JWT_SECRET, // Secret key
+              { expiresIn: '2h' } // Options
+          );
+
+          console.log("Admin login successful, token generated");
+
+          // Send the token in the response
+          return res.status(200).json({ token });
+      } else {
+          console.log("Invalid admin credentials");
+          return res.status(401).json({ message: 'Invalid username or password' });
+      }
+  } catch (error) {
+      console.error("Error during admin login:", error);
+      return res.status(500).json({ message: 'Server error' });
+  }
+});
+
 
 
 const PORT = process.env.PORT || 3000;

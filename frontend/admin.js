@@ -1,41 +1,49 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const sections = document.querySelectorAll('.content-section');
-    const sidebarLinks = document.querySelectorAll('.sidebar li');
-  
-    sidebarLinks.forEach((link) => {
-      link.addEventListener('click', () => {
-        sidebarLinks.forEach((item) => item.classList.remove('active'));
-        link.classList.add('active');
-  
-        sections.forEach((section) => section.classList.remove('active'));
-        const sectionId = link.dataset.section;
-        document.getElementById(sectionId).classList.add('active');
-      });
-    });
-  });
-  
+// DOM Elements
+const sidebar = document.getElementById('sidebar');
+const hamburgerMenu = document.getElementById('hamburger-menu');
+const closeSidebar = document.getElementById('close-sidebar');
+const overlay = document.getElementById('overlay');
+const sidebarLinks = document.querySelectorAll('.sidebar ul li');
+const contentSections = document.querySelectorAll('.content-section');
 
-  // Admin Frontend JS (admin.js)
-
-// Function to switch between sections
-function switchSection(activeSection) {
-    const sections = document.querySelectorAll('.content-section');
-    sections.forEach(section => {
-        section.classList.add('hidden');
-    });
-    document.getElementById(activeSection).classList.remove('hidden');
+// Function to Toggle Sidebar
+function toggleSidebar(open) {
+  if (open) {
+    sidebar.classList.add('open');
+    overlay.classList.add('active');
+  } else {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('active');
+  }
 }
 
-// Handle sidebar clicks to switch content sections
-const sidebarItems = document.querySelectorAll('.sidebar li');
-sidebarItems.forEach(item => {
-    item.addEventListener('click', function() {
-        const section = item.getAttribute('data-section');
-        switchSection(section);
-        sidebarItems.forEach(i => i.classList.remove('active'));
-        item.classList.add('active');
-    });
+// Add Event Listeners for Sidebar
+hamburgerMenu.addEventListener('click', () => toggleSidebar(true));
+closeSidebar.addEventListener('click', () => toggleSidebar(false));
+overlay.addEventListener('click', () => toggleSidebar(false));
+
+// Tab Switch Function
+function switchTab(sectionId) {
+  // Deactivate all links and hide all sections
+  sidebarLinks.forEach(link => link.classList.remove('active'));
+  contentSections.forEach(section => section.classList.remove('active', 'hidden'));
+
+  // Activate clicked link and corresponding section
+  document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
+  document.getElementById(sectionId).classList.add('active');
+  toggleSidebar(false); // Close sidebar on mobile
+}
+
+// Add Event Listeners to Sidebar Links
+sidebarLinks.forEach(link => {
+  link.addEventListener('click', () => {
+    const sectionId = link.getAttribute('data-section');
+    switchTab(sectionId);
+  });
 });
+
+// Initialize First Tab
+switchTab('bank-transfer');
 
  
 // Integrating backend into frontend for deposit management
@@ -214,7 +222,7 @@ document.getElementById('search-btn').addEventListener('click', async () => {
     console.log("Fetching holdings for UID:", uid);
 
     try {
-        const response = await fetch(`https://sterling-edge.onrender.com/admin/user-holdings/${uid}`, {
+        const response = await fetch(`http://localhost:3000/admin/user-holdings/${uid}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('authToken')}`
@@ -258,7 +266,7 @@ document.getElementById('add-holding-btn').addEventListener('click', async () =>
 
     try {
         // Add new holding
-        const response = await fetch('https://sterling-edge.onrender.com/admin/add-holding', {
+        const response = await fetch('http://localhost:3000/admin/add-holding', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -272,7 +280,7 @@ document.getElementById('add-holding-btn').addEventListener('click', async () =>
         console.log("Holding added successfully");
 
         // Fetch updated holdings to recalculate total amount
-        const updatedHoldingsResponse = await fetch(`https://sterling-edge.onrender.com/admin/user-holdings/${uid}`, {
+        const updatedHoldingsResponse = await fetch(`http://localhost:3000/admin/user-holdings/${uid}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('authToken')}`
@@ -284,7 +292,7 @@ document.getElementById('add-holding-btn').addEventListener('click', async () =>
         // Calculate the new total amount
         const totalAmount = updatedData.holdings.reduce((total, holding) => total + holding.amount, 0);
 
-        await fetch(`https://sterling-edge.onrender.com/admin/user-balance/${uid}`, {
+        await fetch(`http://localhost:3000/admin/user-balance/${uid}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -314,7 +322,7 @@ document.getElementById('update-balance-btn').addEventListener('click', async ()
     }
 
     try {
-        const response = await fetch(`https://sterling-edge.onrender.com/admin/user-balance/${uid}`, {
+        const response = await fetch(`http://localhost:3000/admin/user-balance/${uid}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
