@@ -25,7 +25,7 @@ document.getElementById('update-password-form').addEventListener('submit', async
     }
 
     try {
-        const response = await fetch(`http://localhost:3000/reset-password/${token}`, {
+        const response = await fetch(`https://swiftedge-trade.onrender.com/reset-password/${token}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ password: newPassword }),
@@ -36,7 +36,7 @@ document.getElementById('update-password-form').addEventListener('submit', async
 
         if (response.ok) {
             alert('Password updated successfully!');
-            window.location.href = '/login.html';
+            window.location.href = 'login.html';
         } else {
             alert(data.message || 'Failed to reset password.');
         }

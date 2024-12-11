@@ -49,7 +49,7 @@ switchTab('bank-transfer');
 // Integrating backend into frontend for deposit management
 
 document.addEventListener('DOMContentLoaded', () => {
-    const baseURL = "http://localhost:3000"; // Backend URL
+    const baseURL = "https://swiftedge-trade.onrender.com"; // Backend URL
 
     // Elements for Bank Transfer
     const bankTransferForm = document.querySelector('#bank-transfer form');
@@ -222,7 +222,7 @@ document.getElementById('search-btn').addEventListener('click', async () => {
     console.log("Fetching holdings for UID:", uid);
 
     try {
-        const response = await fetch(`http://localhost:3000/admin/user-holdings/${uid}`, {
+        const response = await fetch(`https://swiftedge-trade.onrender.com/admin/user-holdings/${uid}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('authToken')}`
@@ -266,7 +266,7 @@ document.getElementById('add-holding-btn').addEventListener('click', async () =>
 
     try {
         // Add new holding
-        const response = await fetch('http://localhost:3000/admin/add-holding', {
+        const response = await fetch('https://swiftedge-trade.onrender.com/admin/add-holding', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -280,7 +280,7 @@ document.getElementById('add-holding-btn').addEventListener('click', async () =>
         console.log("Holding added successfully");
 
         // Fetch updated holdings to recalculate total amount
-        const updatedHoldingsResponse = await fetch(`http://localhost:3000/admin/user-holdings/${uid}`, {
+        const updatedHoldingsResponse = await fetch(`https://swiftedge-trade.onrender.com/admin/user-holdings/${uid}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('authToken')}`
@@ -292,7 +292,7 @@ document.getElementById('add-holding-btn').addEventListener('click', async () =>
         // Calculate the new total amount
         const totalAmount = updatedData.holdings.reduce((total, holding) => total + holding.amount, 0);
 
-        await fetch(`http://localhost:3000/admin/user-balance/${uid}`, {
+        await fetch(`https://swiftedge-trade.onrender.com/admin/user-balance/${uid}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -322,7 +322,7 @@ document.getElementById('update-balance-btn').addEventListener('click', async ()
     }
 
     try {
-        const response = await fetch(`http://localhost:3000/admin/user-balance/${uid}`, {
+        const response = await fetch(`https://swiftedge-trade.onrender.com/admin/user-balance/${uid}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
