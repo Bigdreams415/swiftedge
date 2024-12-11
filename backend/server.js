@@ -14,13 +14,13 @@ const nodemailer = require('nodemailer');
 const app = express();
 
 
-// Serve static files from the frontend folder
-app.use(express.static(path.join(__dirname, '../frontend')));
+// // Serve static files from the frontend folder
+// app.use(express.static(path.join(__dirname, '../frontend')));
 
-// Route to serve home.html for the homepage
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/index.html'));
-});
+// // Route to serve home.html for the homepage
+// app.get('/', (req, res) => {
+//     res.sendFile(path.join(__dirname, '../frontend/index.html'));
+// });
 
 
 // Middleware

@@ -54,6 +54,12 @@ body {
   color: #ff8000;
 }
 
+.sidebar p{
+  color: #ff8000;
+  font-size: 20px;
+  padding-bottom: 10px;
+}
+
 .sidebar .close-btn {
   background: none;
   color: white;
