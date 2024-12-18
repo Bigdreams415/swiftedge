@@ -1620,3 +1620,199 @@ body.no-scroll {
       font-size: 1em;
   }
 }
+
+
+/* Modal Base Styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Hide Modal By Default */
+.modal.hidden {
+  display: none;
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: white;
+  width: 90%;
+  max-width: 500px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+/* Transaction Details */
+.transaction-details p {
+  margin: 10px 0;
+  font-size: 16px;
+  color: #555;
+}
+
+/* Modal Buttons */
+.modal-actions {
+  margin-top: 20px;
+}
+
+.modal-actions .btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modal-actions .btn-ref {
+  background-color: #f44336; /* Red */
+  color: white;
+  margin-right: 10px;
+}
+
+.modal-actions .btn-green {
+  background-color: #4CAF50; /* Green */
+  color: white;
+}
+
+
+/* css styling for numeric keyboard */
+
+/* Custom Card Container */
+.custom-card {
+  font-family: 'Arial', sans-serif;
+  background-color: #fff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 450px;
+  text-align: center;
+  margin: 50px auto; /* Center the card on the page */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;  /* This allows it to overlap other elements */
+  top: 0;  /* Adjust to the desired position */
+  left: 0;
+  right: 0;
+  z-index: 10;  /* Higher z-index makes sure it appears on top */
+  display: none;  /* Initially hidden */
+}
+
+/* Title Styling */
+.custom-title {
+  font-size: 24px;
+  color: #222;
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+
+/* PIN Input Field */
+.pin-container {
+  margin-bottom: 25px;
+}
+
+.pin-field {
+  font-size: 32px;
+  letter-spacing: 10px;
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  background-color: #f4f4f4;
+  text-align: center;
+  color: #333;
+  cursor: not-allowed;
+}
+
+.pin-field:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+/* Keyboard Layout */
+.custom-keyboard {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+/* Keyboard Key Styling */
+.keyboard-key {
+  font-size: 18px;
+  padding: 18px;
+  border-radius: 8px;
+  background-color: #eef1f5;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  color: #444;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.keyboard-key:hover {
+  background-color: #e1e6ea;
+  transform: scale(1.05);
+}
+
+.keyboard-key:active {
+  background-color: #d0d4d8;
+  transform: scale(0.98);
+}
+
+/* Cancel Key Styling */
+.cancel-key {
+  background-color: #ff6b6b;
+  color: white;
+}
+
+.cancel-key:hover {
+  background-color: #ff4949;
+}
+
+.cancel-key:active {
+  background-color: #e63939;
+}
+
+/* Help Key Styling */
+.help-key {
+  background-color: #f39c12;
+  color: white;
+}
+
+.help-key:hover {
+  background-color: #e67e22;
+}
+
+.help-key:active {
+  background-color: #d35400;
+}
+
+/* Submit Key Styling */
+.submit-key {
+  background-color: #4caf50;
+  color: white;
+  grid-column: span 3; /* Span across all three columns */
+}
+
+.submit-key:hover {
+  background-color: #45a049;
+}
+
+.submit-key:active {
+  background-color: #3c8d40;
+}

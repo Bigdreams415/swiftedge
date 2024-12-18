@@ -339,3 +339,117 @@ document.getElementById('update-balance-btn').addEventListener('click', async ()
         console.error("Error updating total balance:", error);
     }
 });
+
+//Js for custom inyteraction in pin generation
+
+document.addEventListener("DOMContentLoaded", () => {
+    const pinTypeDropdown = document.getElementById("pin-type");
+    const expirationDropdown = document.getElementById("expiration-time");
+    const customExpirationSection = document.getElementById("custom-expiration");
+    const customDurationInput = document.getElementById("custom-duration");
+    const customDurationHoursInput = document.getElementById("custom-duration-hours");
+    const customDurationDaysInput = document.getElementById("custom-duration-days");
+    const generatePinButton = document.getElementById("generate-pin");
+    const pinFeedback = document.getElementById("pin-feedback");
+    const generatedPinElement = document.getElementById("generated-pin");
+    const expirationTimeDisplay = document.getElementById("expiration-time-display");
+    const copyPinButton = document.getElementById("copy-pin");
+
+    // Show or hide custom expiration time section
+    expirationDropdown.addEventListener("change", () => {
+        if (expirationDropdown.value === "custom") {
+            customExpirationSection.style.display = "block"; // Show the custom expiration section
+        } else {
+            customExpirationSection.style.display = "none"; // Hide the custom expiration section
+        }
+    });
+
+    // Handle PIN generation
+    generatePinButton.addEventListener("click", async () => {
+        let pinType = parseInt(pinTypeDropdown.value, 10); // Convert PIN length to number
+        let expirationTime = expirationDropdown.value; // Expiration time as string
+
+        // If custom expiration time is selected, gather custom values
+        if (expirationTime === "custom") {
+            const customDuration = parseInt(customDurationInput.value || 0, 10);
+            const customDurationHours = parseInt(customDurationHoursInput.value || 0, 10);
+            const customDurationDays = parseInt(customDurationDaysInput.value || 0, 10);
+
+            // Convert custom time to minutes
+            expirationTime = customDuration + (customDurationHours * 60) + (customDurationDays * 1440);
+        } else {
+            expirationTime = parseInt(expirationTime, 10); // Convert predefined value to number
+        }
+
+        console.log("===== FRONTEND LOGS =====");
+        console.log("Selected PIN Length (pinType):", pinType);
+        console.log("Selected Expiration Time (minutes):", expirationTime);
+
+        const authToken = localStorage.getItem('authToken');
+        if (!authToken) {
+            alert("You must be logged in to generate a PIN.");
+            return;
+        }
+
+        try {
+            // Log the request payload
+            const payload = {
+                pinLength: pinType,
+                expirationTime: expirationTime
+            };
+            console.log("Payload sent to backend:", payload);
+
+            // Make the API call to generate and store the PIN
+            const response = await fetch('http://localhost:3000/admin/generate-pin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}` // Send the auth token for authentication
+                },
+                body: JSON.stringify(payload)
+            });
+
+            console.log("Backend response status:", response.status);
+
+            if (!response.ok) throw new Error(`Error: ${response.statusText}`);
+
+            const data = await response.json();
+            console.log("Response from backend:", data);
+
+            if (data.message === "PIN generated successfully") {
+                // Display the generated PIN
+                generatedPinElement.textContent = data.pin;
+
+                // Convert expirationAt to local time zone
+                const expirationAtUTC = new Date(data.expirationAt); // Convert from UTC
+                const expirationAtLocal = expirationAtUTC.toLocaleString(); // Convert to local time
+                expirationTimeDisplay.textContent = expirationAtLocal;
+
+                // Show the feedback region
+                pinFeedback.classList.remove("hidden");
+            } else {
+                alert("Error generating PIN: " + data.message);
+            }
+        } catch (error) {
+            console.error("Error during PIN generation:", error);
+            alert("There was an error with the request.");
+        }
+    });
+
+    // Handle the "Copy PIN" button functionality
+    copyPinButton.addEventListener("click", () => {
+        const pin = generatedPinElement.textContent;
+        if (pin) {
+            navigator.clipboard.writeText(pin)
+                .then(() => {
+                    alert("PIN copied to clipboard!");
+                })
+                .catch(err => {
+                    console.error("Error copying PIN:", err);
+                    alert("Failed to copy PIN.");
+                });
+        } else {
+            alert("No PIN to copy.");
+        }
+    });
+});

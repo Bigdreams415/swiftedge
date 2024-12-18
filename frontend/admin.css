@@ -497,3 +497,132 @@ button:hover {
     width: 100%;
   }
 }
+
+/* Generate pin css code */
+
+/* PIN Generation Section Styling */
+#pin-generation {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+}
+
+/* Section Heading */
+#pin-generation h2 {
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+/* Form Styling */
+#pin-form {
+  display: flex;
+  flex-direction: column;
+}
+
+#pin-form label {
+  font-size: 1rem;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+/* Dropdown and Input Fields */
+#pin-form select, #pin-form input {
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+/* Custom Expiration Styling */
+/* Custom Expiration Styling */
+#custom-expiration {
+  display: none; /* Initially hidden */
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+}
+
+#custom-expiration label {
+  font-size: 1rem;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+#custom-expiration input {
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  width: 100%;
+}
+
+
+/* Button Styling */
+#generate-pin {
+  background-color: #ff8000;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+#generate-pin:hover {
+  background-color: #e67800;
+}
+
+/* Feedback Region */
+#pin-feedback {
+  background-color: #f4f4f4;
+  padding: 20px;
+  border-radius: 5px;
+  margin-top: 20px;
+  /* display: none; */
+}
+
+#pin-feedback p {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+#copy-pin {
+  background-color: #ff8000;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+#copy-pin:hover {
+  background-color: #e67800;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  #pin-generation {
+    padding: 15px;
+  }
+
+  #pin-form label, #pin-form select, #pin-form input, #generate-pin {
+    font-size: 0.9rem; /* Adjust font size for mobile */
+  }
+
+  #generate-pin {
+    padding: 12px;
+  }
+
+  #pin-feedback p {
+    font-size: 0.9rem;
+  }
+}

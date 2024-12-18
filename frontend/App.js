@@ -489,3 +489,178 @@ document.getElementById('roi-calculator-form').addEventListener('submit', functi
     resultDiv.style.display = 'block';
 });
 
+
+
+//Working on the Modal
+
+// Add event listeners
+document.addEventListener("DOMContentLoaded", () => {
+    const withdrawButtons = document.querySelectorAll(".withdrawal-submit");
+    const modal = document.getElementById("transaction-summary-modal");
+    const cancelBtn = document.getElementById("cancel-transaction");
+    const confirmBtn = document.getElementById("confirm-transaction");
+
+    // Modal elements to populate
+    const summaryAmount = document.getElementById("summary-amount");
+    const summaryMethod = document.getElementById("summary-method");
+    const summaryInfo = document.getElementById("summary-info");
+
+    // Withdrawal forms
+    const cryptoForm = document.querySelector("#crypto-method form");
+    const bankForm = document.querySelector("#bank-method form");
+
+    // PIN input section
+    const verificationSection = document.querySelector('.custom-card');  // PIN verification section
+
+    // Show Modal with Dynamic Content
+    withdrawButtons.forEach((button) => {
+        button.addEventListener("click", (event) => {
+            event.preventDefault(); // Prevent form submission
+
+            // Determine withdrawal method
+            const method = button.closest(".withdrawal-method").id.includes("crypto")
+                ? "Crypto Withdrawal"
+                : "Bank Withdrawal";
+
+            // Extract data based on method
+            if (method === "Crypto Withdrawal") {
+                const amount = cryptoForm.querySelector("#crypto-amount").value || "0.00";
+                const wallet = cryptoForm.querySelector("#crypto-wallet").value || "N/A";
+                const type = cryptoForm.querySelector("#crypto-type").value || "N/A";
+
+                summaryAmount.textContent = `$${parseFloat(amount).toFixed(2)}`;
+                summaryMethod.textContent = method;
+                summaryInfo.textContent = `Wallet Address: ${wallet}, Crypto Type: ${type}`;
+            } else if (method === "Bank Withdrawal") {
+                const amount = bankForm.querySelector("#bank-amount").value || "0.00";
+                const bankName = bankForm.querySelector("#bank-name").value || "N/A";
+                const accountNumber = bankForm.querySelector("#account-number").value || "N/A";
+
+                summaryAmount.textContent = `$${parseFloat(amount).toFixed(2)}`;
+                summaryMethod.textContent = method;
+                summaryInfo.textContent = `Bank: ${bankName}, Account: ${accountNumber}`;
+            }
+
+            // Show the modal
+            modal.classList.remove("hidden");
+        });
+    });
+
+    // Hide Modal on Cancel
+    cancelBtn.addEventListener("click", () => {
+        modal.classList.add("hidden");
+    });
+
+    // Show the verification section and hide the modal on Confirm
+    confirmBtn.addEventListener("click", () => {
+        // Hide the modal
+        modal.classList.add("hidden");
+
+        // Show the verification PIN section
+        verificationSection.style.display = 'block';  // This will remove the display: none from the PIN input section
+
+        // Optionally, hide the continue button in the modal after confirming
+        confirmBtn.style.display = 'none';
+    });
+});
+
+
+// Js functionality for Pin verification
+
+function loadScript(url) {
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = url;
+        script.onload = () => resolve();
+        script.onerror = () => reject(new Error(`Failed to load script: ${url}`));
+        document.head.append(script);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', async function () {
+    // Load SweetAlert2
+    try {
+        await loadScript("https://cdn.jsdelivr.net/npm/sweetalert2@11");
+
+        // Elements
+        const pinInput = document.getElementById('custom-pin');
+        const keyboardKeys = document.querySelectorAll('.keyboard-key');
+
+        // Backend API URL
+        const verifyPinEndpoint = 'http://localhost:3000/verify-pin';
+
+        // Helper to handle PIN input
+        function updatePinInput(keyValue) {
+            if (keyValue === 'clear') {
+                pinInput.value = ''; // Clear the input
+            } else if (keyValue === 'submit') {
+                if (pinInput.value.length === 4 || pinInput.value.length === 6) {
+                    verifyPin(pinInput.value); // Verify PIN if valid length
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid PIN',
+                        text: 'Please enter a valid 4 or 6-digit PIN.',
+                    });
+                }
+            } else if (pinInput.value.length < 6) {
+                pinInput.value += keyValue; // Add digit to the PIN input
+            }
+        }
+
+        // Verify PIN with the backend
+        async function verifyPin(pin) {
+            try {
+                const response = await fetch(verifyPinEndpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ pin }),
+                });
+
+                const result = await response.json();
+
+                if (response.status === 200) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Transaction Approved!',
+                        text: 'The money is on its way to your bank.',
+                    });
+                    pinInput.value = ''; // Clear the input after successful verification
+                } else if (response.status === 404) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'PIN Expired',
+                        text: 'Please request a new PIN.',
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid PIN',
+                        text: 'The PIN entered is incorrect. Please try again.',
+                    });
+                }
+            } catch (error) {
+                console.error('Error verifying PIN:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error Verifying PIN',
+                    text: 'An error occurred while verifying the PIN. Please try again later.',
+                });
+            }
+        }
+
+        // Add click event listeners to all keys
+        keyboardKeys.forEach((key) => {
+            key.addEventListener('click', function () {
+                const keyValue = this.getAttribute('data-key');
+                updatePinInput(keyValue);
+            });
+        });
+
+    } catch (error) {
+        console.error('Failed to load SweetAlert2:', error);
+        alert("Failed to load SweetAlert2");
+    }
+});

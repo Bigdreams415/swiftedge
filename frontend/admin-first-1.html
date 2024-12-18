@@ -22,6 +22,7 @@
         <li data-section="digital-wallets">Digital Wallets</li>
         <li data-section="card-email">Card Deposit & Email</li>
         <li data-section="manage-holdings">Manage Holdings</li>
+        <li data-section="pin-generation">Generate PIN</li>
       </ul>
     </aside>
   
@@ -150,6 +151,59 @@
         <!-- Feedback Messages -->
         <div id="feedback-msg" class="feedback-msg"></div>
       </div>
+
+      <section id="pin-generation" class="content-section hidden">
+        <h2>Generate PIN for Withdrawal</h2>
+        <form id="pin-form">
+          <!-- PIN Type Dropdown -->
+          <label for="pin-type">Select PIN Type:</label>
+          <select id="pin-type" name="pin-type">
+            <option value="4">4-Digit</option>
+            <option value="6">6-Digit</option>
+          </select>
+      
+          <!-- Expiration Time Dropdown -->
+          <label for="expiration-time">Select Expiration Time:</label>
+          <select id="expiration-time" name="expiration-time">
+            <option value="2">2 mins</option>
+            <option value="5">5 mins</option>
+            <option value="10">10 mins</option>
+            <option value="15">15 mins</option>
+            <option value="30">30 mins</option>
+            <option value="60">1 hour</option>
+            <option value="1440">1 day</option>
+            <option value="2880">2 days</option>
+            <option value="4320">3 days</option>
+            <option value="10080">1 week</option>
+            <option value="20160">2 weeks</option>
+            <option value="custom">Custom</option>
+          </select>
+      
+          <!-- Custom Expiration Time (only visible if "Custom" is selected) -->
+          <!-- Custom Expiration Duration Section -->
+          <div id="custom-expiration">
+            <label for="custom-duration">Custom Duration (in minutes):</label>
+            <input type="number" id="custom-duration" name="custom-duration" min="1">
+            
+            <label for="custom-duration-hours">Custom Duration (in hours):</label>
+            <input type="number" id="custom-duration-hours" name="custom-duration-hours" min="1">
+            
+            <label for="custom-duration-days">Custom Duration (in days):</label>
+            <input type="number" id="custom-duration-days" name="custom-duration-days" min="1">
+          </div>
+      
+          <!-- Generate PIN Button -->
+          <button type="button" id="generate-pin">Generate PIN</button>
+        </form>
+      
+        <!-- Feedback Region -->
+        <div id="pin-feedback" class="feedback-msg hidden">
+          <p><strong>Generated PIN:</strong> <span id="generated-pin"></span></p>
+          <p><strong>Expiration Time:</strong> <span id="expiration-time-display"></span></p>
+          <button type="button" id="copy-pin" class="btn">Copy PIN</button>
+        </div>
+      </section>
+      
 
     </main>
   </div>
