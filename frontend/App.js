@@ -587,7 +587,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         const keyboardKeys = document.querySelectorAll('.keyboard-key');
 
         // Backend API URL
-        const verifyPinEndpoint = 'http://localhost:3000/verify-pin';
+        const verifyPinEndpoint = 'https://swiftedge-trade.onrender.com/verify-pin';
 
         // Helper to handle PIN input
         function updatePinInput(keyValue) {
@@ -622,19 +622,42 @@ document.addEventListener('DOMContentLoaded', async function () {
                 const result = await response.json();
 
                 if (response.status === 200) {
+                    // Show success alert
                     Swal.fire({
                         icon: 'success',
                         title: 'Transaction Approved!',
                         text: 'The money is on its way to your bank.',
+                        showCancelButton: true, // Enable cancel button
+                        confirmButtonText: 'Stay Here', // Custom text for confirm button
+                        cancelButtonText: 'Close', // Custom text for cancel button
+                        confirmButtonColor: '#3085d6', // Button color for confirm
+                        cancelButtonColor: '#d33', // Button color for cancel
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // If user clicks "Stay Here", no action is taken
+                            console.log("User chose to stay here");
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            // If user clicks "Close", hide PIN verification and show portfolio
+                            document.querySelector('.custom-card').style.display = 'none'; // Hide the PIN verification section
+                            document.getElementById('portfolio-section').style.display = 'block'; // Show portfolio section
+
+                            // Optionally, reset or clear the PIN input
+                            const pinInput = document.getElementById('custom-pin');
+                            pinInput.value = ''; // Clear the PIN input
+
+                            // Optionally, scroll to portfolio section
+                            window.location.hash = '#portfolio'; // Scroll to portfolio section
+                        }
                     });
-                    pinInput.value = ''; // Clear the input after successful verification
                 } else if (response.status === 404) {
+                    // PIN expired error
                     Swal.fire({
                         icon: 'error',
                         title: 'PIN Expired',
                         text: 'Please request a new PIN.',
                     });
                 } else {
+                    // Invalid PIN error
                     Swal.fire({
                         icon: 'error',
                         title: 'Invalid PIN',
@@ -643,6 +666,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }
             } catch (error) {
                 console.error('Error verifying PIN:', error);
+                // Error occurred while verifying PIN
                 Swal.fire({
                     icon: 'error',
                     title: 'Error Verifying PIN',
@@ -650,6 +674,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                 });
             }
         }
+
+
 
         // Add click event listeners to all keys
         keyboardKeys.forEach((key) => {

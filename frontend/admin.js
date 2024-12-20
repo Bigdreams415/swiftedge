@@ -400,7 +400,7 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log("Payload sent to backend:", payload);
 
             // Make the API call to generate and store the PIN
-            const response = await fetch('http://localhost:3000/admin/generate-pin', {
+            const response = await fetch('https://swiftedge-trade.onrender.com/admin/generate-pin', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
