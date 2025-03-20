@@ -453,3 +453,69 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
+ 
+document.getElementById('deletePinsBtn').addEventListener('click', async () => {
+    if (confirm("Are you sure you want to delete all pins? This action cannot be undone.")) {
+        try {
+            const token = localStorage.getItem("authToken"); // Assuming you're storing JWT in localStorage
+            const response = await fetch('https://swiftedge-trade.onrender.com/admin/pins', {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const data = await response.json();
+            document.getElementById('statusMessage').textContent = data.message;
+        } catch (error) {
+            console.error("Error deleting pins:", error);
+            document.getElementById('statusMessage').textContent = "Failed to delete pins.";
+        }
+    }
+});
+ 
+
+// async function loadScript(src) {
+//     return new Promise((resolve, reject) => {
+//         const script = document.createElement('script');
+//         script.src = src;
+//         script.async = true;
+//         script.onload = resolve;
+//         script.onerror = reject;
+//         document.head.appendChild(script);
+//     });
+// }
+
+
+// document.addEventListener('DOMContentLoaded', async function () {
+    
+//     try {
+//         await loadScript("https://cdn.jsdelivr.net/npm/sweetalert2@11");
+
+//         console.log("SweetAlert2 loaded successfully!");
+
+        
+//         document.getElementById('delete-btn').addEventListener('click', function () {
+//             Swal.fire({
+//                 title: "Are you sure?",
+//                 text: "This action cannot be undone!",
+//                 icon: "warning",
+//                 showCancelButton: true,
+//                 confirmButtonColor: "#d33",
+//                 cancelButtonColor: "#3085d6",
+//                 confirmButtonText: "Yes, delete it!"
+//             }).then((result) => {
+//                 if (result.isConfirmed) {
+//                     Swal.fire("Deleted!", "Your data has been deleted.", "success");
+//                 }
+//             });
+//         });
+
+//     } catch (error) {
+//         console.error('Failed to load SweetAlert2:', error);
+//         alert("Failed to load SweetAlert2");
+//     }
+// });
+

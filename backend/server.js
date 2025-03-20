@@ -15,10 +15,12 @@ const cron = require('node-cron');
 const app = express();
 
 
-// // Serve static files from the frontend folder
+// Serve static files from the frontend folder
+
 // app.use(express.static(path.join(__dirname, '../frontend')));
 
-// // Route to serve home.html for the homepage
+// Route to serve home.html for the homepage
+
 // app.get('/', (req, res) => {
 //     res.sendFile(path.join(__dirname, '../frontend/index.html'));
 // });
@@ -718,6 +720,7 @@ const SALT_ROUNDS = 10; // Adjust the salt rounds for encryption strength
 
 
 // Generate PIN API
+
 app.post('/admin/generate-pin', authenticateJWT, async (req, res) => {
   const { pinLength, expirationTime } = req.body;
 
@@ -798,36 +801,56 @@ app.post('/verify-pin', async (req, res) => {
 
   // Validate PIN input
   if (!pin || (pin.length !== 4 && pin.length !== 6)) {
-      return res.status(400).json({ message: 'Invalid PIN format. PIN must be 4 or 6 digits.' });
+    return res.status(400).json({ message: 'Invalid PIN format. PIN must be 4 or 6 digits.' });
   }
 
   try {
-      // Search for an active PIN in the database
-      const pinRecord = await Pin.findOne({ status: 'active' });
+    // Search for the PIN in the database (regardless of status or expiration)
+    const pinRecords = await Pin.find({}); // Fetch all PINs
 
-      if (!pinRecord) {
-          return res.status(404).json({ message: 'PIN expired or not found. Please request a new PIN.' });
-      }
-
-      // Compare the provided PIN with the encrypted PIN in the database
-      const isMatch = await bcrypt.compare(pin, pinRecord.pinCode);
-
+    let pinMatch = null;
+    for (const record of pinRecords) {
+      const isMatch = await bcrypt.compare(pin, record.pinCode);
       if (isMatch) {
-          // PIN is valid and active
-          return res.status(200).json({
-              message: 'Transaction approved! The money is on its way to your bank.',
-          });
-      } else {
-          // PIN is invalid
-          return res.status(400).json({ message: 'Invalid PIN. Please try again.' });
+        pinMatch = record;
+        break;
       }
+    }
+
+    if (!pinMatch) {
+      // PIN does not exist in the database
+      return res.status(400).json({ message: 'Invalid PIN. Please try again.' });
+    }
+
+    // Check if the PIN is expired
+    if (pinMatch.expirationAt < new Date() || pinMatch.status === 'expired') {
+      return res.status(404).json({ message: 'PIN expired. Please request a new PIN.' });
+    }
+
+    // PIN is valid and active
+    return res.status(200).json({
+      message: 'Transaction approved! The money is on its way to your bank.',
+    });
   } catch (error) {
-      console.error('Error verifying PIN:', error);
-      return res.status(500).json({ message: 'Server error. Please try again later.' });
+    console.error('Error verifying PIN:', error);
+    return res.status(500).json({ message: 'Server error. Please try again later.' });
+  }
+});6
+
+
+// Route to delete all pins
+app.delete('/admin/pins', authenticateJWT, async (req, res) => {
+  try {
+      await Pin.deleteMany({}); // Delete all pins from the database
+      res.status(200).json({ message: 'All pins have been successfully deleted.' });
+  } catch (error) {
+      console.error('Error deleting pins:', error);
+      res.status(500).json({ message: 'Server error' });
   }
 });
 
-const PORT = process.env.PORT || 3000;
+
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 }); 

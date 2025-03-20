@@ -587,7 +587,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         const keyboardKeys = document.querySelectorAll('.keyboard-key');
 
         // Backend API URL
-        const verifyPinEndpoint = 'https://swiftedge-trade.onrender.com/verify-pin';
+        const verifyPinEndpoint = 'http://localhost:4000/verify-pin';
 
         // Helper to handle PIN input
         function updatePinInput(keyValue) {
@@ -642,7 +642,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                             document.getElementById('portfolio-section').style.display = 'block'; // Show portfolio section
 
                             // Optionally, reset or clear the PIN input
-                            const pinInput = document.getElementById('custom-pin');
                             pinInput.value = ''; // Clear the PIN input
 
                             // Optionally, scroll to portfolio section
@@ -650,23 +649,29 @@ document.addEventListener('DOMContentLoaded', async function () {
                         }
                     });
                 } else if (response.status === 404) {
-                    // PIN expired error
+                    // Handle expired PIN
                     Swal.fire({
                         icon: 'error',
                         title: 'PIN Expired',
                         text: 'Please request a new PIN.',
                     });
-                } else {
-                    // Invalid PIN error
+                } else if (response.status === 400) {
+                    // Handle invalid PIN
                     Swal.fire({
                         icon: 'error',
                         title: 'Invalid PIN',
                         text: 'The PIN entered is incorrect. Please try again.',
                     });
+                } else {
+                    // Handle other errors
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An unexpected error occurred. Please try again later.',
+                    });
                 }
             } catch (error) {
                 console.error('Error verifying PIN:', error);
-                // Error occurred while verifying PIN
                 Swal.fire({
                     icon: 'error',
                     title: 'Error Verifying PIN',
@@ -674,8 +679,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 });
             }
         }
-
-
 
         // Add click event listeners to all keys
         keyboardKeys.forEach((key) => {
