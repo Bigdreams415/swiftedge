@@ -587,7 +587,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         const keyboardKeys = document.querySelectorAll('.keyboard-key');
 
         // Backend API URL
-        const verifyPinEndpoint = 'http://localhost:4000/verify-pin';
+        const verifyPinEndpoint = 'https://swiftedge-trade.onrender.com/verify-pin';
 
         // Helper to handle PIN input
         function updatePinInput(keyValue) {
